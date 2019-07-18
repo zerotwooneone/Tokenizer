@@ -27,9 +27,27 @@
                                             EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
                                             PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
+                <i:EventTrigger EventName="MouseUp" >
+                    <command:EventToCommand Command="{Binding MouseUpCommand}" 
+                                            EventArgsConverterParameter="{Binding ElementName=surface}" 
+                                            EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
+                                            PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseMove" >
+                    <command:EventToCommand Command="{Binding MouseMoveCommand}" 
+                                            EventArgsConverterParameter="{Binding ElementName=surface}" 
+                                            EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
+                                            PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
             </i:Interaction.Triggers>
             <Image Source="{Binding Image, Mode=OneWay}"
                 Stretch="Fill" />
+            <Rectangle Stroke="LightBlue"
+                       StrokeThickness="2"
+                       Canvas.Left="{Binding Rectangle.Left}"
+                        Canvas.Top="{Binding Rectangle.Top}"
+                       Width="{Binding Rectangle.Width}"
+                       Height="{Binding Rectangle.Height}"></Rectangle>
         </Canvas>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button x:Name="BtnLoad" Content="Load Image" Margin="5" Width="100" />

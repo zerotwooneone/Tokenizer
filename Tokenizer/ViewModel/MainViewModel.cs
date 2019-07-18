@@ -1,5 +1,8 @@
 using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using GalaSoft.MvvmLight;
@@ -22,10 +25,13 @@ namespace Tokenizer.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        private readonly IMathUtil _mathUtil;
+        private RectangleViewmodel _rectangle;
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
-        public MainViewModel()
+        public MainViewModel(IMathUtil mathUtil)
         {
             ////if (IsInDesignMode)
             ////{
@@ -38,14 +44,64 @@ namespace Tokenizer.ViewModel
             
             Image = new BitmapImage(new Uri("Resources/test.png", UriKind.Relative));
             MouseDownCommand = new RelayCommand<MouseEventArgsWrapper>(OnMouseDown);
+            MouseUpCommand = new RelayCommand<MouseEventArgsWrapper>(OnMouseUp);
+            MouseMoveCommand = new RelayCommand<MouseEventArgsWrapper>(OnMouseMove);
+            Rectangle = null;
+            _mathUtil = mathUtil;
         }
 
-        private void OnMouseDown(MouseEventArgsWrapper e)
+        private void OnMouseMove(MouseEventArgsWrapper obj)
         {
-            int x = 0;
+            if(obj.MouseEventArgs.LeftButton == MouseButtonState.Released || Rectangle == null) return;
+            
+            var x = _mathUtil.Min(obj.Point.X, Rectangle.Left);
+            var y = _mathUtil.Min(obj.Point.Y, Rectangle.Top);
+
+            Rectangle.Left = x;
+            Rectangle.Top = y;
+
+            var w = _mathUtil.Max(obj.Point.X, Rectangle.Left) - x;
+            var h = _mathUtil.Max(obj.Point.Y, Rectangle.Top) - y;
+
+            Rectangle.Width = w;
+            Rectangle.Height = h;
+        }
+
+        private void OnMouseUp(MouseEventArgsWrapper obj)
+        {
+            if (obj.MouseEventArgs.LeftButton == MouseButtonState.Released)
+            {
+                Rectangle = null;
+            }
+        }
+
+        private void OnMouseDown(MouseEventArgsWrapper obj)
+        {
+            if (obj.MouseEventArgs.LeftButton == MouseButtonState.Pressed)
+            {
+                Rectangle = new RectangleViewmodel
+                {
+                    Left = obj.Point.X,
+                    Top = obj.Point.Y
+                };
+            }
         }
 
         public BitmapImage Image { get; }
         public RelayCommand<MouseEventArgsWrapper> MouseDownCommand {get;}
+        public RelayCommand<MouseEventArgsWrapper> MouseUpCommand {get;}
+        public RelayCommand<MouseEventArgsWrapper> MouseMoveCommand {get;}
+        public RectangleViewmodel Rectangle
+        {
+            get => _rectangle;
+            set 
+            {
+                if (_rectangle != value)
+                {
+                    _rectangle = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
     }
 }
