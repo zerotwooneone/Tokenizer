@@ -1,8 +1,10 @@
 using System;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Tokenizer.Converters;
 
 namespace Tokenizer.ViewModel
 {
@@ -35,17 +37,15 @@ namespace Tokenizer.ViewModel
             ////}
             
             Image = new BitmapImage(new Uri("Resources/test.png", UriKind.Relative));
-            MouseDownCommand = new RelayCommand<MouseEventArgs>(OnMouseDown);
+            MouseDownCommand = new RelayCommand<MouseEventArgsWrapper>(OnMouseDown);
         }
 
-        private void OnMouseDown(MouseEventArgs e)
+        private void OnMouseDown(MouseEventArgsWrapper e)
         {
             int x = 0;
         }
 
         public BitmapImage Image { get; }
-        public RelayCommand<MouseEventArgs> MouseDownCommand {get;}
-        public double PanelX { get; set; }
-        public double PanelY { get; set; }
+        public RelayCommand<MouseEventArgsWrapper> MouseDownCommand {get;}
     }
 }

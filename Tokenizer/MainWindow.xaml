@@ -7,9 +7,13 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:command="http://www.galasoft.ch/mvvmlight"
         xmlns:behaviors="clr-namespace:Tokenizer.Behaviors"
+        xmlns:converters="clr-namespace:Tokenizer.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
+    <Window.Resources>
+        <converters:MouseButtonEventArgsToPointConverter x:Key="MouseButtonEventArgsToPointConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.9*"/>
@@ -18,12 +22,12 @@
         <Canvas x:Name="surface" Background="Transparent">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDown" >
-                    <command:EventToCommand Command="{Binding MouseDownCommand}" PassEventArgsToCommand="True"/>
+                    <command:EventToCommand Command="{Binding MouseDownCommand}" 
+                                            EventArgsConverterParameter="{Binding ElementName=surface}" 
+                                            EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
+                                            PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-            <i:Interaction.Behaviors>
-                <behaviors:MouseBehaviour MouseX="{Binding PanelX, Mode=OneWayToSource}" MouseY="{Binding PanelY, Mode=OneWayToSource}" />
-            </i:Interaction.Behaviors>
             <Image Source="{Binding Image, Mode=OneWay}"
                 Stretch="Fill" />
         </Canvas>
