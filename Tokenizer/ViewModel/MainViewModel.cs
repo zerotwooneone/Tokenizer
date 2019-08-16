@@ -1,8 +1,5 @@
 using System;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using GalaSoft.MvvmLight;
@@ -46,8 +43,21 @@ namespace Tokenizer.ViewModel
             MouseDownCommand = new RelayCommand<MouseEventArgsWrapper>(OnMouseDown);
             MouseUpCommand = new RelayCommand<MouseEventArgsWrapper>(OnMouseUp);
             MouseMoveCommand = new RelayCommand<MouseEventArgsWrapper>(OnMouseMove);
+            SizeChangedCommand = new RelayCommand<SizeChangedEventArgs>(OnSizeChanged);
             Rectangle = null;
             _mathUtil = mathUtil;
+        }
+
+        private void OnSizeChanged(SizeChangedEventArgs obj)
+        {
+            var imageHeight = Image.Height / 2;
+            var imageWidth = Image.Width / 2;
+
+            var canvasHeight = obj.NewSize.Height / 2;
+            var canvasWidth = obj.NewSize.Width / 2;
+
+            ImageLeft = canvasWidth - imageWidth;
+            ImageTop = canvasHeight - imageHeight;
         }
 
         private void OnMouseMove(MouseEventArgsWrapper obj)
@@ -99,6 +109,36 @@ namespace Tokenizer.ViewModel
                 if (_rectangle != value)
                 {
                     _rectangle = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        public RelayCommand<SizeChangedEventArgs> SizeChangedCommand { get; }
+
+        private double _ImageLeft;
+        public double ImageLeft
+        {
+            get { return _ImageLeft; }
+            set
+            {
+                if (_ImageLeft != value)
+                {
+                    _ImageLeft = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
+
+        private double _ImageTop;
+        public double ImageTop
+        {
+            get { return _ImageTop; }
+            set
+            {
+                if (_ImageTop != value)
+                {
+                    _ImageTop = value;
                     RaisePropertyChanged();
                 }
             }

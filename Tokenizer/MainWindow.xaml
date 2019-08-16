@@ -22,32 +22,37 @@
         <Canvas x:Name="surface" Background="Transparent">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDown" >
-                    <command:EventToCommand Command="{Binding MouseDownCommand}" 
-                                            EventArgsConverterParameter="{Binding ElementName=surface}" 
+                    <command:EventToCommand Command="{Binding MouseDownCommand, Mode=OneWay}" 
+                                            EventArgsConverterParameter="{Binding ElementName=surface, Mode=OneWay}" 
                                             EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
                                             PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
                 <i:EventTrigger EventName="MouseUp" >
-                    <command:EventToCommand Command="{Binding MouseUpCommand}" 
-                                            EventArgsConverterParameter="{Binding ElementName=surface}" 
+                    <command:EventToCommand Command="{Binding MouseUpCommand, Mode=OneWay}" 
+                                            EventArgsConverterParameter="{Binding ElementName=surface, Mode=OneWay}" 
                                             EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
                                             PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
                 <i:EventTrigger EventName="MouseMove" >
-                    <command:EventToCommand Command="{Binding MouseMoveCommand}" 
-                                            EventArgsConverterParameter="{Binding ElementName=surface}" 
+                    <command:EventToCommand Command="{Binding MouseMoveCommand, Mode=OneWay}" 
+                                            EventArgsConverterParameter="{Binding ElementName=surface, Mode=OneWay}" 
                                             EventArgsConverter="{StaticResource MouseButtonEventArgsToPointConverter}"
+                                            PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="SizeChanged" >
+                    <command:EventToCommand Command="{Binding SizeChangedCommand, Mode=OneWay}" 
                                             PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <Image Source="{Binding Image, Mode=OneWay}"
-                Stretch="Fill" />
+                Canvas.Left="{Binding ImageLeft, Mode=OneWay}"
+                Canvas.Top="{Binding ImageTop, Mode=OneWay}"/>
             <Rectangle Stroke="LightBlue"
                        StrokeThickness="2"
-                       Canvas.Left="{Binding Rectangle.Left}"
-                        Canvas.Top="{Binding Rectangle.Top}"
-                       Width="{Binding Rectangle.Width}"
-                       Height="{Binding Rectangle.Height}"></Rectangle>
+                       Canvas.Left="{Binding Rectangle.Left, Mode=OneWay}"
+                        Canvas.Top="{Binding Rectangle.Top, Mode=OneWay}"
+                       Width="{Binding Rectangle.Width, Mode=OneWay}"
+                       Height="{Binding Rectangle.Height, Mode=OneWay}"></Rectangle>
         </Canvas>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Button x:Name="BtnLoad" Content="Load Image" Margin="5" Width="100" />
