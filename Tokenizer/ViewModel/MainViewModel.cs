@@ -44,17 +44,28 @@ namespace Tokenizer.ViewModel
             MouseUpCommand = new RelayCommand<MouseEventArgsWrapper>(OnMouseUp);
             MouseMoveCommand = new RelayCommand<MouseEventArgsWrapper>(OnMouseMove);
             SizeChangedCommand = new RelayCommand<SizeChangedEventArgs>(OnSizeChanged);
+            RenderedCommand = new RelayCommand<Size>(OnRendered);
             Rectangle = null;
             _mathUtil = mathUtil;
         }
 
+        private void OnRendered(Size renderSize)
+        {
+            RecenterImage(renderSize);
+        }
+
         private void OnSizeChanged(SizeChangedEventArgs obj)
         {
+            RecenterImage(obj.NewSize);
+        }
+
+        private void RecenterImage(Size size)
+        {
+            var canvasHeight = size.Height / 2;
+            var canvasWidth = size.Width / 2;
+
             var imageHeight = Image.Height / 2;
             var imageWidth = Image.Width / 2;
-
-            var canvasHeight = obj.NewSize.Height / 2;
-            var canvasWidth = obj.NewSize.Width / 2;
 
             ImageLeft = canvasWidth - imageWidth;
             ImageTop = canvasHeight - imageHeight;
@@ -143,5 +154,7 @@ namespace Tokenizer.ViewModel
                 }
             }
         }
+
+        public RelayCommand<Size> RenderedCommand { get; }
     }
 }

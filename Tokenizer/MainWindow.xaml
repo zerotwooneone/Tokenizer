@@ -10,16 +10,22 @@
         xmlns:converters="clr-namespace:Tokenizer.Converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
+        DataContext="{Binding Source={StaticResource Locator}, Path=Main}" >
     <Window.Resources>
         <converters:MouseButtonEventArgsToPointConverter x:Key="MouseButtonEventArgsToPointConverter" />
     </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="ContentRendered">
+            <command:EventToCommand Command="{Binding RenderedCommand}"
+                                    CommandParameter="{Binding ElementName=surface , Path=RenderSize, Mode=OneWay}"></command:EventToCommand>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.9*"/>
             <RowDefinition Height="0.1*"/>
         </Grid.RowDefinitions>
-        <Canvas x:Name="surface" Background="Transparent">
+        <Canvas x:Name="surface" Background="Transparent" >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDown" >
                     <command:EventToCommand Command="{Binding MouseDownCommand, Mode=OneWay}" 
