@@ -92,6 +92,8 @@ namespace Tokenizer.ViewModel
         {
             if (obj.MouseEventArgs.LeftButton == MouseButtonState.Released)
             {
+                var n = new CroppedBitmap(Image, new Int32Rect((int)Rectangle.Left, (int)Rectangle.Top, (int)Rectangle.Width, (int)Rectangle.Height));
+                Image = n;
                 Rectangle = null;
             }
         }
@@ -108,7 +110,19 @@ namespace Tokenizer.ViewModel
             }
         }
 
-        public BitmapImage Image { get; }
+        private BitmapSource _image;
+        public BitmapSource Image
+        {
+            get { return _image; }
+            set
+            {
+                if (_image != value)
+                {
+                    _image = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
         public RelayCommand<MouseEventArgsWrapper> MouseDownCommand {get;}
         public RelayCommand<MouseEventArgsWrapper> MouseUpCommand {get;}
         public RelayCommand<MouseEventArgsWrapper> MouseMoveCommand {get;}
